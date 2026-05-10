@@ -35,14 +35,16 @@ class Recipe(models.Model):
 
     def total_likes(self):
         return self.likes.count()
+
+
 class Comment(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='comments')
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = models.TextField(verbose_name="Текст коментаря")
-
-    # Прапорець для ШІ-модерації (за замовчуванням прихований)
-    is_approved = models.BooleanField(default=False)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # ОСЬ ЦЬОГО РЯДКА СКОРІШ ЗА ВСЕ НЕ ВИСТАЧАЄ:
+    status = models.CharField(max_length=20, default='pending')
+
     def __str__(self):
-        return f"Коментар {self.author.username} до {self.recipe.title}"
+        return f"Коментар {self.author} до {self.recipe}"
