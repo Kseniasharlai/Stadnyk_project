@@ -57,11 +57,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'recipe_db'),
-        'USER': os.environ.get('POSTGRES_USER', 'recipe_user'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'recipe_password'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'db'),
-        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+        'NAME': os.environ.get('PGDATABASE', 'recipe_db'),
+        'USER': os.environ.get('PGUSER', 'recipe_user'),
+        'PASSWORD': os.environ.get('PGPASSWORD', 'recipe_password'),
+        'HOST': os.environ.get('PGHOST', 'db'),
+        'PORT': os.environ.get('PGPORT', '5432'),
     }
 }
 
