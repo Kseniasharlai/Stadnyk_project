@@ -1,0 +1,29 @@
+{% extends 'recipes/base.html' %}
+
+{% block content %}
+<h1 class="mb-4">⭐ Мої збережені рецепти</h1>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for recipe in recipes %}
+    <div class="col">
+        <div class="card h-100 shadow-sm border-warning">
+            {% if recipe.image %}
+                <img src="{{ recipe.image.url }}" class="card-img-top recipe-img" alt="{{ recipe.title }}">
+            {% endif %}
+            <div class="card-body">
+                <span class="badge bg-primary mb-2">{{ recipe.category.name }}</span>
+                <h5 class="card-title">{{ recipe.title }}</h5>
+                <p class="card-text text-muted">⏱️ {{ recipe.cooking_time }} хв.</p>
+                <a href="{% url 'recipes:recipe_detail' recipe.id %}" class="btn btn-warning w-100">Переглянути</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center mt-5">
+        <h3>У вас ще немає збережених рецептів.</h3>
+        <p>Натисніть зірочку на сторінці рецепта, щоб він з'явився тут!</p>
+        <a href="{% url 'recipes:recipe_list' %}" class="btn btn-primary">Шукати рецепти</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

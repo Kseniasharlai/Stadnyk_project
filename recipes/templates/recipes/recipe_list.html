@@ -1,0 +1,33 @@
+{% extends 'recipes/base.html' %}
+
+{% block content %}
+
+{% if query %}
+    <h2 class="mb-4">Результати пошуку для: <strong>"{{ query }}"</strong></h2>
+    <a href="{% url 'recipes:recipe_list' %}" class="btn btn-outline-secondary mb-4">Скинути пошук</a>
+{% else %}
+    <h1 class="mb-4">Всі рецепти</h1>
+{% endif %}
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for recipe in recipes %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            {% if recipe.image %}
+                <img src="{{ recipe.image.url }}" class="card-img-top recipe-img" alt="{{ recipe.title }}">
+            {% endif %}
+            <div class="card-body">
+                <span class="badge bg-primary mb-2">{{ recipe.category.name }}</span>
+                <h5 class="card-title">{{ recipe.title }}</h5>
+                <p class="card-text text-muted">⏱️ Час приготування: {{ recipe.cooking_time }} хв.</p>
+                <a href="{% url 'recipes:recipe_detail' recipe.id %}" class="btn btn-outline-dark w-100">Читати рецепт</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <p>На жаль, рецептів ще немає. Додайте їх через адмін-панель.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

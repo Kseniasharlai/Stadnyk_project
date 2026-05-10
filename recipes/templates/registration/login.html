@@ -1,0 +1,21 @@
+{% extends 'recipes/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow mt-5">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4">Вхід на сайт</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success w-100 mt-3">Увійти</button>
+                </form>
+                <div class="text-center mt-3">
+                    <small>Ще немає акаунту? <a href="{% url 'recipes:register' %}">Зареєструйтеся</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

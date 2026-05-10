@@ -1,0 +1,86 @@
+{% extends 'recipes/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            {% if recipe.image %}
+                <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}" style="max-height: 400px; object-fit: cover;">
+            {% endif %}
+            <div class="card-body p-5">
+                <span class="badge bg-primary mb-2">{{ recipe.category.name }}</span>
+                <h1 class="card-title mb-3">{{ recipe.title }}</h1>
+                <p class="text-muted">⏱️ Час: {{ recipe.cooking_time }} хв. | 👤 Автор: {{ recipe.author.username }}</p>
+
+                <div class="mb-4">
+                    {% if user.is_authenticated %}
+                        <form action="{% url 'recipes:like_recipe' recipe.id %}" method="POST" class="d-inline">
+                            {% csrf_token %}
+                            {% if user in recipe.likes.all %}
+                                <button type="submit" class="btn btn-danger">❤️ {{ recipe.likes.count }}</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-outline-danger">🤍 {{ recipe.likes.count }}</button>
+                            {% endif %}
+                        </form>
+
+                        <form action="{% url 'recipes:favorite_recipe' recipe.id %}" method="POST" class="d-inline ms-2">
+                            {% csrf_token %}
+                            {% if user in recipe.favorites.all %}
+                                <button type="submit" class="btn btn-warning">⭐ В обраному</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-outline-warning">☆ Зберегти</button>
+                            {% endif %}
+                        </form>
+                    {% else %}
+                        <p class="text-danger small"><em>Увійдіть на сайт, щоб ставити лайки та зберігати рецепти.</em></p>
+                        <span class="btn btn-outline-secondary disabled">❤️ {{ recipe.likes.count }}</span>
+                    {% endif %}
+                </div>
+                <hr>
+
+                <h4 class="mt-4">Інгредієнти:</h4>
+                <p>{{ recipe.ingredients|linebreaksbr }}</p>
+
+                <h4 class="mt-4">Кроки приготування:</h4>
+                <p>{{ recipe.description|linebreaksbr }}</p>
+
+                <div class="mt-4">
+                    <a href="{% url 'recipes:recipe_list' %}" class="btn btn-secondary">&larr; Назад до списку</a>
+                    <hr class="mt-5">
+                <h3 class="mb-4">Коментарі ({{ comments.count }})</h3>
+
+                {% if user.is_authenticated %}
+                    <div class="card mb-4 shadow-sm border-0 bg-light">
+                        <div class="card-body">
+                            <form method="POST">
+                                {% csrf_token %}
+                                {{ form.text }}
+                                <button type="submit" class="btn btn-primary mt-3">Залишити коментар</button>
+                            </form>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <a href="{% url 'login' %}">Увійдіть</a>, щоб залишити коментар.
+                    </div>
+                {% endif %}
+
+                {% for comment in comments %}
+                    <div class="card mb-3 border-0 border-bottom rounded-0">
+                        <div class="card-body px-0">
+                            <div class="d-flex justify-content-between">
+                                <strong>👤 {{ comment.author.username }}</strong>
+                                <small class="text-muted">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
+                            </div>
+                            <p class="mt-2 mb-0">{{ comment.text }}</p>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-muted">Ще немає коментарів. Будьте першим!</p>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
