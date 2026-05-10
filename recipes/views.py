@@ -36,8 +36,7 @@ def recipe_detail(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
 
     # Виводимо тільки ті коментарі, які пройшли перевірку (is_approved=True)
-    comments = recipe.comments.filter(is_approved=True).order_by('-created_at')
-
+    comments = recipe.comments.filter(status='approved').order_by('-created_at')
     if request.method == 'POST':
         # Перевіряємо, чи залогінений користувач
         if not request.user.is_authenticated:
